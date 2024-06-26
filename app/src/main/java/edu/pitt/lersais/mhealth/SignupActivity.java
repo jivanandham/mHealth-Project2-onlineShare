@@ -146,9 +146,39 @@ public class SignupActivity extends BaseActivity implements View.OnClickListener
     public void initializeCryptoKey(String cryptoKeyId) throws IOException {
         // TODO: TASK 1.1
         // TODO: create a thread to initialize a key using Google Cloud KMS
-        // BEGIN
+        final String keyid = cryptoKeyId;
+        Thread thread = new Thread(new Runnable(){
+            @Override
+            public void run() {
+                try {
 
+                    CloudKMS kms = CloudKMSUtil.getInstance().createAuthorizedClient(getApplicationContext());
 
-        // END
+                    // The resource name of the location associated with the KeyRing.
+                    String parent = String.format(
+                            "projects/%s/locations/%s/keyRings/%s",
+                            Constant.KMS_PROJECT_ID,
+                            Constant.KMS_LOCATION,
+                            Constant.KMS_KEY_RING_ID);
+
+                    // This will allow the API access to the key for encryption and decryption.
+                    String purpose = "ENCRYPT_DECRYPT";
+                    CryptoKey cryptoKey = new CryptoKey();
+                    cryptoKey.setPurpose(purpose);
+
+                    // Create the CryptoKey for your project.
+
+                    CryptoKey createdKey = kms.projects().locations().keyRings().cryptoKeys()
+                            .create(parent, cryptoKey)
+                            .setCryptoKeyId(keyid)
+                            .execute();
+                    System.out.println(createdKey);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
     }
 }

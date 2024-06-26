@@ -54,9 +54,31 @@ public class EncryptMedicalRecordThread extends Thread {
 
             // TODO: Task 1.4
             // TODO: encrypt the content of the record from originalRecord and store in encryptedRecord
-            // BEGIN
+            encryptedRecord.setName(kmsUtil.encrypt(originalRecord.getName(), userUid, kms));
+            encryptedRecord.setDob(kmsUtil.encrypt(originalRecord.getDob(), userUid, kms));
+            encryptedRecord.setSex(kmsUtil.encrypt(originalRecord.getSex(), userUid, kms));
+            encryptedRecord.setMarital_status(kmsUtil.encrypt(originalRecord.getMarital_status(), userUid, kms));
+            encryptedRecord.setOccupation(kmsUtil.encrypt(originalRecord.getOccupation(), userUid, kms));
+            encryptedRecord.setContact(kmsUtil.encrypt(originalRecord.getContact(), userUid, kms));
+            encryptedRecord.setDiseases(kmsUtil.encrypt(originalRecord.getDiseases(), userUid, kms));
+            encryptedRecord.setAllergies(kmsUtil.encrypt(originalRecord.getAllergies(), userUid, kms));
+            encryptedRecord.setComments(kmsUtil.encrypt(originalRecord.getComments(), userUid, kms));
 
-            // END
+            HashMap<String, String> familyDiseases = new HashMap<>();
+            familyDiseases.put(Constant.MEDICAL_RECORD_FAMILY_FATHER_KEY,
+                    kmsUtil.encrypt(originalRecord.getFamily_diseases().get(Constant.MEDICAL_RECORD_FAMILY_FATHER_KEY), userUid, kms));
+            familyDiseases.put(Constant.MEDICAL_RECORD_FAMILY_MOTHER_KEY,
+                    kmsUtil.encrypt(originalRecord.getFamily_diseases().get(Constant.MEDICAL_RECORD_FAMILY_MOTHER_KEY), userUid, kms));
+            familyDiseases.put(Constant.MEDICAL_RECORD_FAMILY_SIBLING_KEY,
+                    kmsUtil.encrypt(originalRecord.getFamily_diseases().get(Constant.MEDICAL_RECORD_FAMILY_SIBLING_KEY), userUid, kms));
+            encryptedRecord.setFamily_diseases(familyDiseases);
+
+            HashMap<String, String> habits = new HashMap<>();
+            habits.put(Constant.MEDICAL_RECORD_HABIT_ALCOHOL_KEY,
+                    kmsUtil.encrypt(originalRecord.getHabits().get(Constant.MEDICAL_RECORD_HABIT_ALCOHOL_KEY), userUid, kms));
+            habits.put(Constant.MEDICAL_RECORD_HABIT_CANNABIS_KEY,
+                    kmsUtil.encrypt(originalRecord.getHabits().get(Constant.MEDICAL_RECORD_HABIT_CANNABIS_KEY), userUid, kms));
+            encryptedRecord.setHabits(habits);
 
 
             Message msg = new Message();

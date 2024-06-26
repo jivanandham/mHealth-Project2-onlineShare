@@ -9,6 +9,10 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.cloudkms.v1.CloudKMS;
 import com.google.api.services.cloudkms.v1.CloudKMSScopes;
+import com.google.api.services.cloudkms.v1.model.DecryptRequest;
+import com.google.api.services.cloudkms.v1.model.DecryptResponse;
+import com.google.api.services.cloudkms.v1.model.EncryptRequest;
+import com.google.api.services.cloudkms.v1.model.EncryptResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,7 +41,7 @@ public class CloudKMSUtil {
 
         HttpTransport transport = new NetHttpTransport();
         JsonFactory jsonFactory = new JacksonFactory();
-        InputStream input = context.getAssets().open("LERSAIS-mHealth-KMS-bdd9f7acef42.json");
+        InputStream input = context.getAssets().open("healthapp-ac092-firebase-adminsdk-zjmus-50867ea766.json");
         GoogleCredential credential = GoogleCredential.fromStream(input);
 
         input.close();
@@ -54,18 +58,33 @@ public class CloudKMSUtil {
     public String encrypt(String plaintext, String userUid, CloudKMS kms)
             throws IOException {
         //TODO: Task 1.2
-        // BEGIN
+        String resourceName = String.format(
+                "projects/%s/locations/%s/keyRings/%s/cryptoKeys/%s",
+                Constant.KMS_PROJECT_ID, Constant.KMS_LOCATION, Constant.KMS_KEY_RING_ID, userUid);
 
-        return null;
-        // END
+        byte[] plaintextbyte = plaintext.getBytes("ISO-8859-1");
+
+        EncryptRequest request = new EncryptRequest().encodePlaintext(plaintextbyte);
+        EncryptResponse response = kms.projects().locations().keyRings().cryptoKeys()
+                .encrypt(resourceName, request)
+                .execute();
+
+        return new String(response.decodeCiphertext(), "ISO-8859-1");
     }
 
     public String decrypt(String ciphertext, String userUid, CloudKMS kms)
             throws IOException {
         // TODO: Task 1.2
-        // BEGIN
+        String resourceName = String.format(
+                "projects/%s/locations/%s/keyRings/%s/cryptoKeys/%s",
+                Constant.KMS_PROJECT_ID, Constant.KMS_LOCATION, Constant.KMS_KEY_RING_ID, userUid);
 
-        return null;
-        // END
+        byte[] ciphertextbyte = ciphertext.getBytes("ISO-8859-1");
+
+        DecryptRequest request = new DecryptRequest().encodeCiphertext(ciphertextbyte);
+        DecryptResponse response = kms.projects().locations().keyRings().cryptoKeys()
+                .decrypt(resourceName, request).execute();
+
+        return new String(response.decodePlaintext(), "ISO-8859-1");
     }
 }

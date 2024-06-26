@@ -31,7 +31,7 @@
         <!--check the credentials-->
         <meta-data
             android:name="com.google.android.nearby.messages.API_KEY"
-            android:value="AIzaSyARX0_qIBjxwU5Df-yIAicHiAEv4DiKYQA" />
+            android:value="AIzaSyBAZPohrJ1tQePjWZR2lTitQ2KqDbL2Qhc" />
 
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"

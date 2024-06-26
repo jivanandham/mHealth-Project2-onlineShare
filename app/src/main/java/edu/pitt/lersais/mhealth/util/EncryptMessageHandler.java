@@ -4,16 +4,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
-import java.util.HashMap;
-
 import edu.pitt.lersais.mhealth.model.MedicalHistoryRecord;
 
 /**
  * The EncryptMessageHandler that is used to process the encrypted record.
- *
- * @author Haobing Huang and Runhua Xu.
  */
-
 public class EncryptMessageHandler extends Handler {
 
     private Callback callback;
@@ -31,10 +26,8 @@ public class EncryptMessageHandler extends Handler {
         }
     }
 
-
-
     public interface Callback {
-        void processEncryptRecord(MedicalHistoryRecord record);
+        void processEncryptRecord(Object record);
     }
 
     public void setCallback(Callback callback) {
